@@ -1,0 +1,7 @@
+html, body, #app{
+    height: 100%;
+    /*外边距属性*/
+    margin: 0;
+    /*内边距属性*/
+    padding: 0;
+}

@@ -13,7 +13,7 @@
         </el-form-item>
         <!--密码-->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-icon_password" type="password"></el-input>
+          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" type="password"></el-input>
         </el-form-item>
         <!--按钮-->
         <el-form-item class="btns">
@@ -32,7 +32,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: 'admin'
+        password: '123456'
       },
       loginFormRules: {
         username: [
@@ -41,7 +41,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 6, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]
       }
     }
@@ -49,8 +49,16 @@ export default {
   methods: {
     login () {
       this.$refs.loginFormRef.validate(async valid => {
-        if (!valid) return
-        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (!valid) {
+          return
+        }
+      const { data :res } =  await this.$http.post('login', this.loginForm)
+        if (res.meta.status !== 200) return this.$message.error('登陆失败')
+        this.$message.success('登陆成功')
+        //1、登陆成功后保存tooken 保存在 sessionStorage
+        //2、跳转到后台zhuye主页
+        window.sessionStorage.setItem('token',res.data.token)
+        this.$router.push('/home')
       })
     },
     resetLoginForm () {
